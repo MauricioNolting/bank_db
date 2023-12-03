@@ -1,10 +1,14 @@
 import { Transfers } from './transfers.model.js';
 
 export class TransferService {
-  static async findOne(id) {
-    return await Transfers.findOne({
+  static async create(data) {
+    return await Transfers.create(data);
+  }
+
+  static async findAll(id) {
+    return await Transfers.findAll({
       where: {
-        id,
+        senderUserId: id,
       },
     });
   }

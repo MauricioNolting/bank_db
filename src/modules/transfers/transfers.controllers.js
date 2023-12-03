@@ -34,11 +34,22 @@ export const makeTransfer = async (req, res) => {
     receiverAccount.amount += amount;
     senderAccount.amount -= amount;
 
+    // Con el .save guardo los cambios en la base de datos(
     await receiverAccount.save();
     await senderAccount.save();
 
+    // Esto es para crear el historial.
+    const senderUserId = receiverAccount.id;
+    const receiverUserId = senderAccount.id;
+
+    await TransferService.create({
+      senderUserId,
+      receiverUserId,
+      amount,
+    });
+
     return res.status(200).json({
-      message: 'You are transfered with exito',
+      message: `You are transfered ${amount} at account ${receiverAcountNumber}`,
       receiverId: receiverAccount.dataValues,
       senderId: senderAccount.dataValues,
     });

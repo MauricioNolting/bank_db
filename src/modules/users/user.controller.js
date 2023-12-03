@@ -1,3 +1,4 @@
+import { TransferService } from '../transfers/transfers.service.js';
 import { UserService } from './user.service.js';
 
 export const signup = async (req, res) => {
@@ -51,6 +52,17 @@ export const login = async (req, res) => {
 
 export const getHistory = async (req, res) => {
   try {
+    const { id } = req.params;
+
+    const transferHistoryById = await TransferService.findAll(id);
+    if (!transferHistoryById) {
+      return res.status(400).json({
+        status: 'error',
+        message: `Transfer of user by id ${id} not exist`,
+      });
+    }
+
+    return res.status(200).json(transferHistoryById);
   } catch (error) {
     console.log(error);
     res.status(500).json({
